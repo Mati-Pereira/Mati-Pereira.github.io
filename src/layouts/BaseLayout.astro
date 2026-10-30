@@ -1,0 +1,41 @@
+---
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import { t, link, type Lang } from '../i18n/ui';
+
+interface Props {
+  lang: Lang;
+  title?: string;
+  description?: string;
+  /** Rota equivalente no outro idioma (para o seletor e hreflang). */
+  altHref?: string;
+}
+const { lang, title, description, altHref } = Astro.props;
+const ui = t(lang);
+const pageTitle = title ? `${title} · ${ui.siteTitle}` : ui.siteTitle;
+const desc = description ?? ui.siteDescription;
+---
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={desc} />
+    <link rel="canonical" href={Astro.url} />
+    <link rel="alternate" type="application/rss+xml" title={ui.siteTitle} href={link(lang, 'rss.xml').replace(/\/$/, '')} />
+    {altHref && <link rel="alternate" hreflang={lang === 'pt' ? 'en' : 'pt-BR'} href={new URL(altHref, Astro.site)} />}
+    <script is:inline>
+      try {
+        const saved = localStorage.getItem('theme');
+        const dark = matchMedia('(prefers-color-scheme: dark)').matches;
+        document.documentElement.dataset.theme = saved ?? (dark ? 'dark' : 'light');
+      } catch {}
+    </script>
+  </head>
+  <body>
+    <Header lang={lang} altHref={altHref} />
+    <main><slot /></main>
+    <footer>© {new Date().getFullYear()} · {ui.siteTitle} · <a href={link(lang, 'rss.xml').replace(/\/$/, '')}>{ui.rss}</a></footer>
+  </body>
+</html>

@@ -1,0 +1,19 @@
+---
+import { t, link, type Lang } from '../i18n/ui';
+import { slugOf, formatDate, tagSlug, type Post } from '../lib/posts';
+
+interface Props { post: Post; lang: Lang }
+const { post, lang } = Astro.props;
+const ui = t(lang);
+---
+<article class="post-card">
+  <h2><a href={link(lang, `posts/${slugOf(post)}`)}>{post.data.title}</a></h2>
+  <div class="meta">
+    <time datetime={post.data.date.toISOString()}>{formatDate(post.data.date, ui.locale)}</time>
+    · {ui.level[post.data.level]}
+  </div>
+  <p>{post.data.description}</p>
+  <ul class="tags">
+    {post.data.tags.map((tag) => <li><a href={link(lang, `tags/${tagSlug(tag)}`)}>{tag}</a></li>)}
+  </ul>
+</article>

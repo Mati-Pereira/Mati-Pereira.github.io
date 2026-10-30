@@ -1,0 +1,34 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { t, link, other, type Lang } from '../i18n/ui';
+import { getPosts, slugOf, formatDate } from '../lib/posts';
+
+const { lang } = Astro.props as { lang: Lang };
+const ui = t(lang);
+const posts = await getPosts(lang);
+const groups = new Map<string, typeof posts>();
+for (const post of posts) {
+  const key = formatDate(post.data.date, ui.locale, { month: 'long', year: 'numeric' });
+  groups.set(key, [...(groups.get(key) ?? []), post]);
+}
+---
+<BaseLayout lang={lang} title={ui.timelineTitle} altHref={link(other(lang), 'timeline')}>
+  <h1>{ui.timelineTitle}</h1>
+  <p>{ui.timelineIntro}</p>
+  {[...groups].map(([month, items]) => (
+    <section>
+      <h2>{month}</h2>
+      <ul class="timeline">
+        {items.map((post) => (
+          <li>
+            <h3><a href={link(lang, `posts/${slugOf(post)}`)}>{post.data.title}</a></h3>
+            <div class="meta">
+              {formatDate(post.data.date, ui.locale, { day: 'numeric', month: 'short' })} · {ui.level[post.data.level]} · {post.data.tags.join(', ')}
+            </div>
+            <div>{post.data.description}</div>
+          </li>
+        ))}
+      </ul>
+    </section>
+  ))}
+</BaseLayout>

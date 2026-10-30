@@ -1,0 +1,14 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PostCard from '../components/PostCard.astro';
+import { t, link, other, type Lang } from '../i18n/ui';
+import type { Post } from '../lib/posts';
+
+const { lang, tag, posts } = Astro.props as { lang: Lang; tag: string; posts: Post[] };
+const ui = t(lang);
+---
+<BaseLayout lang={lang} title={tag} altHref={link(other(lang), 'tags')}>
+  <h1>{ui.postsTagged} “{tag}”</h1>
+  {posts.map((post) => <PostCard post={post} lang={lang} />)}
+  <p><a href={link(lang, 'tags')}>← {ui.allTags}</a></p>
+</BaseLayout>

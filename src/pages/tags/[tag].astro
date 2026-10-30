@@ -1,0 +1,14 @@
+---
+import TagPage from '/src/views/TagPage.astro';
+import { getPosts, tagsOf, tagSlug } from '/src/lib/posts';
+
+export async function getStaticPaths() {
+  const posts = await getPosts('pt');
+  return tagsOf(posts).map((tag) => ({
+    params: { tag: tagSlug(tag) },
+    props: { tag, posts: posts.filter((p) => p.data.tags.includes(tag)) },
+  }));
+}
+const { tag, posts } = Astro.props;
+---
+<TagPage lang="pt" tag={tag} posts={posts} />

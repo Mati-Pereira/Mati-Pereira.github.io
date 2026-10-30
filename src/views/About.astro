@@ -1,0 +1,23 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { t, link, other, type Lang } from '../i18n/ui';
+
+const { lang } = Astro.props as { lang: Lang };
+const ui = t(lang);
+---
+<BaseLayout lang={lang} title={ui.nav.about} altHref={link(other(lang), t(other(lang)).aboutPath)}>
+  <h1>{ui.nav.about}</h1>
+  <div class="prose">
+    {lang === 'pt' ? (
+      <>
+        <p>Oi, eu sou o Matheus. Este blog é o meu caderno de estudos público.</p>
+        <p>A ideia é simples: só aprendemos de verdade quando conseguimos explicar para outra pessoa de forma simples. Então cada post aqui é uma tentativa de explicar algo que estudei — e também um registro do meu progresso.</p>
+      </>
+    ) : (
+      <>
+        <p>Hi, I'm Matheus. This blog is my public study notebook.</p>
+        <p>The idea is simple: we only truly learn something when we can explain it simply to someone else. Every post here is an attempt to explain something I studied — and a record of my progress.</p>
+      </>
+    )}
+  </div>
+</BaseLayout>

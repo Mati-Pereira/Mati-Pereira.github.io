@@ -1,0 +1,12 @@
+---
+import Search from 'astro-pagefind/components/Search.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { t, link, other, type Lang } from '../i18n/ui';
+
+const { lang } = Astro.props as { lang: Lang };
+const ui = t(lang);
+---
+<BaseLayout lang={lang} title={ui.nav.search} altHref={link(other(lang), 'search')}>
+  <h1>{ui.searchTitle}</h1>
+  <Search id="search" className="pagefind-ui" uiOptions={{ showImages: false }} />
+</BaseLayout>

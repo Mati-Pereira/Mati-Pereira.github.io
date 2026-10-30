@@ -1,0 +1,27 @@
+---
+import { render } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { t, link, other, type Lang } from '../i18n/ui';
+import { slugOf, formatDate, tagSlug, type Post } from '../lib/posts';
+
+const { lang, post } = Astro.props as { lang: Lang; post: Post };
+const ui = t(lang);
+const { Content } = await render(post);
+const alt = post.data.translationOf
+  ? link(other(lang), `posts/${post.data.translationOf}`)
+  : link(other(lang));
+---
+<BaseLayout lang={lang} title={post.data.title} description={post.data.description} altHref={alt}>
+  <article data-pagefind-body>
+    <h1>{post.data.title}</h1>
+    <p class="meta">
+      <time datetime={post.data.date.toISOString()}>{formatDate(post.data.date, ui.locale)}</time>
+      · {ui.level[post.data.level]}
+      {post.data.translationOf && <> · <a href={alt}>{ui.readIn}</a></>}
+    </p>
+    <ul class="tags">
+      {post.data.tags.map((tag) => <li><a href={link(lang, `tags/${tagSlug(tag)}`)}>{tag}</a></li>)}
+    </ul>
+    <div class="prose"><Content /></div>
+  </article>
+</BaseLayout>

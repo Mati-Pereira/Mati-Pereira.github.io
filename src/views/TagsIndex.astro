@@ -1,0 +1,17 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { t, link, other, type Lang } from '../i18n/ui';
+import { getPosts, tagsOf, tagSlug } from '../lib/posts';
+
+const { lang } = Astro.props as { lang: Lang };
+const ui = t(lang);
+const posts = await getPosts(lang);
+const tags = tagsOf(posts);
+const count = (tag: string) => posts.filter((p) => p.data.tags.includes(tag)).length;
+---
+<BaseLayout lang={lang} title={ui.nav.tags} altHref={link(other(lang), 'tags')}>
+  <h1>{ui.allTags}</h1>
+  <ul class="tag-cloud tags">
+    {tags.map((tag) => <li><a href={link(lang, `tags/${tagSlug(tag)}`)}>{tag} ({count(tag)})</a></li>)}
+  </ul>
+</BaseLayout>
