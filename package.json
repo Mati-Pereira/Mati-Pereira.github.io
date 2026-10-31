@@ -10,6 +10,7 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
+    "spellcheck": "node scripts/spellcheck.mjs",
     "translate": "node scripts/translate.mjs"
   },
   "dependencies": {

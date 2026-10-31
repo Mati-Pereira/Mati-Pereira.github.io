@@ -15,6 +15,19 @@ npm run build    # gera dist/ + índice de busca (Pagefind)
 Crie `src/content/posts/pt/meu-post.md` (e/ou `en/`). Copie o frontmatter de `src/content/posts/_template.md`.
 Para ligar as traduções, use `translationOf: <slug-do-outro-idioma>` nos dois posts. `draft: true` esconde o post no build.
 
+## Correção ortográfica
+
+Comando separado da tradução. Corrige só ortografia, acentos, pontuação e erros gramaticais claros, sem reescrever o estilo, e mostra um diff do que mudou:
+
+```sh
+npm run spellcheck                 # todos os posts PT
+npm run spellcheck -- meu-post     # só esse post
+npm run spellcheck -- --dry        # só mostra as mudanças, não grava
+npm run spellcheck -- --lang en    # posts em inglês
+```
+
+Fluxo sugerido: `npm run spellcheck` e depois `npm run translate`. Também usa o Claude Code (`claude -p`).
+
 ## Tradução automática PT → EN
 
 Escreva o post só em português (`src/content/posts/pt/`) e rode:
